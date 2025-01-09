@@ -110,8 +110,9 @@ app.post('/send-info', async(req, res) => {
     to: `rishabh@your-agenc.ai`, // Replace with your receiving email
     subject: `New message from ${name}`,
     html: `
-      <h1>OTP Verification</h1>
+      <h1>hey, i just requested a demo</h1>
       <p><strong>name:</strong> ${name}</p>
+      <p><strong>email:</strong> ${email}</p>
       <p><strong>phone:</strong> ${phone}</p>
     `
   }
