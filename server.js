@@ -78,7 +78,7 @@ app.post('/send-email-agenc', async (req, res) => {
   }
 
   const mailOptions = {
-    from: `swativx@gmail.com`,
+    from: `rishabh@your-agenc.ai`,
     to: `<${email}>`, // Replace with your receiving email
     subject: `New message from AgenC`,
     html: `
@@ -106,8 +106,8 @@ app.post('/send-info', async(req, res) => {
   }
 
   const mailtoSelf = {
-    from: `swativx@gmail.com`,
-    to: `swativx@gmail.com`, // Replace with your receiving email
+    from: `rishabh@your-agenc.ai`,
+    to: `rishabh@your-agenc.ai`, // Replace with your receiving email
     subject: `New message from ${name}`,
     html: `
       <h1>OTP Verification</h1>
