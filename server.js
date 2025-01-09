@@ -12,18 +12,18 @@ app.use(cors())
 app.use(express.json())
 
 // Create a transporter using SMTP
-const transporter = nodemailer.createTransport({
+const transporter1 = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   secure: false, // Use TLS
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
+    user: process.env.SMTP_USER_BAMBOO,
+    pass: process.env.SMTP_PASS_BAMBOO
   }
 })
 
 // Email sending endpoint
-app.post('/send-email', async (req, res) => {
+app.post('/send-email-bamboo', async (req, res) => {
   const { name, email, message } = req.body
 
   if (!name || !email || !message) {
@@ -45,7 +45,7 @@ app.post('/send-email', async (req, res) => {
   }
 
   try {
-    await transporter.sendMail(mailOptions)
+    await transporter1.sendMail(mailOptions)
     res.status(200).json({ message: 'Email sent successfully' })
   } catch (error) {
     console.error('Error sending email:', error)
@@ -58,7 +58,75 @@ app.get('/', (req, res) => {
   res.send('Server is running')
 })
 
+const transporter2 = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false, // Use TLS
+  auth: {
+    user: process.env.SMTP_USER_AGENC,
+    pass: process.env.SMTP_PASS_AGENC
+  }
+})
+
+// Email sending endpoint
+app.post('/send-email-agenc', async (req, res) => {
+  const { otp, email} = req.body
+
+  console.log(otp)
+  if (!otp || !email) {
+    return res.status(400).json({ error: 'Please provide name, email, and message' })
+  }
+
+  const mailOptions = {
+    from: `swativx@gmail.com`,
+    to: `<${email}>`, // Replace with your receiving email
+    subject: `New message from AgenC`,
+    html: `
+      <h1>OTP Verification</h1>
+      <p><strong>OTP:</strong> ${otp}</p>
+    `
+  }
+
+  try {
+    await transporter2.sendMail(mailOptions)
+    res.status(200).json({ message: 'Email sent successfully' })
+  } catch (error) {
+    console.error('Error sending email:', error)
+    res.status(500).json({ error: 'Failed to send email' })
+  }
+})
+
+
+app.post('/send-info', async(req, res) => {
+    const { name, phone, email} = req.body
+
+ 
+  if (!name || !phone || !email) {
+    return res.status(400).json({ error: 'Please provide name, email, and message' })
+  }
+
+  const mailtoSelf = {
+    from: `swativx@gmail.com`,
+    to: `swativx@gmail.com`, // Replace with your receiving email
+    subject: `New message from ${name}`,
+    html: `
+      <h1>OTP Verification</h1>
+      <p><strong>name:</strong> ${name}</p>
+      <p><strong>phone:</strong> ${phone}</p>
+    `
+  }
+
+  try {
+    await transporter2.sendMail(mailtoSelf)
+    res.status(200).json({ message: 'Email sent successfully' })
+  } catch (error) {
+    console.error('Error sending email:', error)
+    res.status(500).json({ error: 'Failed to send email' })
+  }
+})
+
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
+
