@@ -23,7 +23,7 @@ const transporter1 = nodemailer.createTransport({
 })
 
 // Email sending endpoint
-app.post('/send-email-bamboo', async (req, res) => {
+app.post('/bamboo/send-email-bamboo', async (req, res) => {
   const { name, email, message } = req.body
 
   if (!name || !email || !message) {
@@ -69,7 +69,7 @@ const transporter2 = nodemailer.createTransport({
 })
 
 // Email sending endpoint
-app.post('/send-email-agenc', async (req, res) => {
+app.post('/agenc/verify', async (req, res) => {
   const { otp, email} = req.body
 
   console.log(otp)
@@ -97,7 +97,7 @@ app.post('/send-email-agenc', async (req, res) => {
 })
 
 
-app.post('/send-info', async(req, res) => {
+app.post('/agenc/send-info', async(req, res) => {
     const { name, phone, email} = req.body
 
  
