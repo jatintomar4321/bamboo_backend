@@ -10,9 +10,20 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: ["https://bamboodigital.in", "https://your-agenc.ai"],
-    methods: ["GET", "POST"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "https://bamboodigital.in",
+        "https://your-agenc.ai",
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json());
