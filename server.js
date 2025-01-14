@@ -33,7 +33,7 @@ const agencTransporter = nodemailer.createTransport({
 });
 
 // Bamboo Digital routes
-app.post("/bamboo/send-email-bamboo", async (req, res) => {
+app.post("/bamboo/send-email", async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
