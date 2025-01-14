@@ -8,24 +8,7 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "https://bamboodigital.in",
-        "https://your-agenc.ai",
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 app.use(express.json());
 
 // Create transporters
@@ -49,8 +32,10 @@ const agencTransporter = nodemailer.createTransport({
   },
 });
 
-// Bamboo Digital routes
-app.post("/bamboo/send-email", async (req, res) => {
+// Bamboo Digital routes under /bamboo path
+const bambooRouter = express.Router();
+
+bambooRouter.post("/send-email", async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
@@ -81,8 +66,10 @@ app.post("/bamboo/send-email", async (req, res) => {
   }
 });
 
-// AgenC routes
-app.post("/agenc/verify", async (req, res) => {
+// AgenC routes under /agenc path
+const agencRouter = express.Router();
+
+agencRouter.post("/verify", async (req, res) => {
   const { otp, email } = req.body;
 
   if (!otp || !email) {
@@ -108,7 +95,7 @@ app.post("/agenc/verify", async (req, res) => {
   }
 });
 
-app.post("/agenc/send-info", async (req, res) => {
+agencRouter.post("/send-info", async (req, res) => {
   const { name, phone, email } = req.body;
 
   if (!name || !phone || !email) {
@@ -138,6 +125,16 @@ app.post("/agenc/send-info", async (req, res) => {
   }
 });
 
+// Mount routers
+app.use("/bamboo", bambooRouter);
+app.use("/agenc", agencRouter);
+
+// Basic route to check server status
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+// Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
