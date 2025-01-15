@@ -12,8 +12,8 @@ app.use(
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = [
-        "https://bamboodigital.in",
-        "https://your-agenc.ai",
+        "https://www.bamboodigital.in",
+        "https://www.your-agenc.ai",
       ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
